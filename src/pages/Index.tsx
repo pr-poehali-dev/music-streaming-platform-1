@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
+  const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(0);
   const [showSubscriptionModal, setShowSubscriptionModal] = useState(false);
@@ -28,10 +30,10 @@ const Index = () => {
   ];
 
   const artists = [
-    { name: "Aurora Beats", followers: "1.2M", image: "/placeholder.svg" },
-    { name: "Echo Chamber", followers: "890K", image: "/placeholder.svg" },
-    { name: "Synth Masters", followers: "2.1M", image: "/placeholder.svg" },
-    { name: "Ambient Flow", followers: "654K", image: "/placeholder.svg" },
+    { name: "Aurora Beats", followers: "1.2M", image: "/img/cb8fa0a4-7185-4196-876a-12e10c67b38d.jpg", id: "aurora-beats" },
+    { name: "Echo Chamber", followers: "890K", image: "/img/fc7813ed-5841-4b65-a226-b8edcba02731.jpg", id: "echo-chamber" },
+    { name: "Synth Masters", followers: "2.1M", image: "/img/9222f9e6-ebd4-4db2-9486-71da8c64e3bd.jpg", id: "synth-masters" },
+    { name: "Ambient Flow", followers: "654K", image: "/img/cb8fa0a4-7185-4196-876a-12e10c67b38d.jpg", id: "ambient-flow" },
   ];
 
   return (
@@ -260,15 +262,30 @@ const Index = () => {
           <h3 className="text-3xl font-['Montserrat'] font-semibold mb-8 text-center">Популярные артисты</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {artists.map((artist, index) => (
-              <Card key={index} className="group hover:bg-secondary/50 transition-all duration-200 cursor-pointer">
+              <Card 
+                key={index} 
+                className="group hover:bg-secondary/50 transition-all duration-200 cursor-pointer"
+                onClick={() => navigate(`/artist/${artist.id}`)}
+              >
                 <CardContent className="p-6 text-center">
-                  <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-primary to-gold-400 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
-                    <Icon name="User" className="w-10 h-10 text-black" />
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden group-hover:scale-105 transition-transform">
+                    <img 
+                      src={artist.image} 
+                      alt={artist.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h4 className="font-semibold mb-1 group-hover:text-primary transition-colors">{artist.name}</h4>
                   <p className="text-sm text-muted-foreground">{artist.followers} подписчиков</p>
-                  <Button size="sm" className="mt-3 bg-primary text-black hover:bg-primary/90">
-                    Подписаться
+                  <Button 
+                    size="sm" 
+                    className="mt-3 bg-primary text-black hover:bg-primary/90"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/artist/${artist.id}`);
+                    }}
+                  >
+                    Смотреть профиль
                   </Button>
                 </CardContent>
               </Card>
